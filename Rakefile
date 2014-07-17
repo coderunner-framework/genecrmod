@@ -16,9 +16,9 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "genecrmod"
   gem.homepage = "http://github.com/edmundhighcock/genecrmod"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "GPLv3"
+  gem.summary = %Q{A module which allows the GENE gyrokinetic code to be run using the CodeRunner framework. }
+  gem.description = %Q{A module which allows the GENE gyrokinetic code to be run using the CodeRunner framework. }
   gem.email = "edmundhighcock@users.sourceforge.net"
   gem.authors = ["Edmund Highcock"]
   # dependencies defined in Gemfile
@@ -29,6 +29,12 @@ require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
+end
+
+Rake::TestTask.new(:sync_variables) do |test|
+  test.libs << 'lib' << 'sync_variables'
+  test.pattern = 'sync_variables/sync_variables.rb'
   test.verbose = true
 end
 
