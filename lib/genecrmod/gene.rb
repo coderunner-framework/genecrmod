@@ -2,6 +2,7 @@
 class CodeRunner
   #  This is a customised subclass of the CodeRunner::Run  class which allows CodeRunner to run and analyse the GENE gyrokinetic code (see http://www2.ipp.mpg.de/~fsj/gene/)
   #
+  #p 'hellllllooooo!!!'
   class Gene < Run::FortranNamelist
     #include CodeRunner::SYSTEM_MODULE
     #
