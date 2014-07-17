@@ -112,7 +112,48 @@ class CodeRunner
         if @restart_id
           @runner.run_list[@restart_id].restart(self)
         end
+        @diagdir = "."
+        @n_procs_sim = actual_number_of_processors
         write_input_file
+    end
+
+    def self.parse_input_file(input_file, strict=true)
+      if FileTest.file? input_file
+        text = File.read(input_file)
+      else
+        text = input_file
+      end
+      i = 0
+      text.gsub!(/^(&species)/i){p $~; "#{$1}_#{i+=1}"}
+      super(text)
+    end
+    def namelist_text(namelist, enum = nil)
+      hash = rcp.namelists[namelist]
+      text = ""
+      ext = enum ? "_#{enum}" : ""
+      text << "!#{'='*30}\n!#{hash[:description]} #{enum} \n!#{'='*30}\n" if hash[:description]
+      #text << "&#{namelist}#{ext}\n"
+      text << "&#{namelist}\n"
+      hash[:variables].each do |var, var_hash|
+        code_var = (var_hash[:code_name] or var)
+        cr_var = var+ext.to_sym
+        value = send(cr_var)
+        if send(cr_var) and (not var_hash[:should_include] or  eval(var_hash[:should_include]))
+          if value.kind_of? Array
+            value.each_with_index do |v, i|
+              output = formatted_variable_output(v)
+              text << " #{code_var}(#{i+1}) = #{output} #{var_hash[:description] ? "! #{var_hash[:description]}": ""}\n"
+            end
+          else
+            output = formatted_variable_output(value)
+            text << " #{code_var} = #{output} #{var_hash[:description] ? "! #{var_hash[:description]}": ""}\n"
+          end
+        elsif rcp.namelists_to_print_not_specified? and rcp.namelists_to_print_not_specified.include?(namelist)
+          text << "  ! #{code_var} not specified --- #{var_hash[:description]}\n"
+        end
+      end
+      text << "/\n\n"
+      text
     end
 
     def check_parameters
@@ -127,12 +168,13 @@ class CodeRunner
 
     #  This command uses the infrastructure provided by Run::FortranNamelist, provided by CodeRunner itself.
     def write_input_file
-      File.open("chease_namelist", 'w'){|file| file.puts input_file_text}
+      #File.open("#@run_name.in", 'w'){|file| file.puts input_file_text}
+      File.open("parameters", 'w'){|file| file.puts input_file_text}
     end
 
     # Parameters which follow the Trinity executable, in this case just the input file.
     def parameter_string
-      " chease_namelist"
+      ""
     end
 
     def parameter_transition
@@ -163,7 +205,8 @@ class CodeRunner
     end
 
 
-    #@fortran_namelist_source_file_match = /(?<!assign_code_parameters)((\.f9[05])|(\.fpp)|COMDAT.inc)$/
+    @fortran_namelist_source_file_match = /((\.F9[05])|(\.fpp)|COMDAT.inc)$/
+    @fortran_namelist_source_file_match = /((\.F9[05]))$/
 
     def input_file_header
       <<EOF
@@ -191,10 +234,10 @@ EOF
       <<EOF1
 ############################################################################
 #                                                                          #
-# Automatically generated defaults file for the GENE CodeRunner module  #
+# Automatically generated defaults file for the GENE CodeRunner module     #
 #                                                                          #
-# This defaults file specifies a set of defaults for GENE which are     #
-# used by CodeRunner to set up and run GENE simulations.                #
+# This defaults file specifies a set of defaults for GENE which are        #
+# used by CodeRunner to set up and run GENE simulations.                   #
 #                                                                          #
 ############################################################################
 
