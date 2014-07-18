@@ -193,9 +193,12 @@ class CodeRunner
     def process_directory_code_specific
       get_status
       #p ['id is', id, 'ctd is ', ctd]
-      #if ctd
+      if ctd
         #get_global_results
-      #end
+        if !nonlinear or nonlinear.fortran_false?
+          get_growth_rates
+        end
+      end
       #p ['fusionQ is ', fusionQ]
       @percent_complete = completed_timesteps.to_f / ntimesteps.to_f * 100.0
     end
@@ -275,38 +278,22 @@ EOF1
       ''
     end
 
-@msdatching_regex = Regexp.new('(^|\A)(?<everything>[^!
-]*?\b #a word boundary
+    def get_growth_rates
+      Dir.chdir(@directory) do
+        if FileTest.exist?('omega.dat')
+          @kyvals, @growth_rates, @frequencies = GSL::Vector.filescan('omega.dat')
+        else
+          @kyvals, @growth_rates, @frequencies = [[]] * 3
+        end
+      end
+    end
+    def graphkit(name, options={})
+      case name
+      when /growth_rates_vs_ky/
+        return GraphKit.quick_create([@kyvals, @growth_rates])
+      end
+    end
 
-  (?<name>[A-Za-z_]\w*)  # the name, which must be a single word (not beginning
-          # with a digit) followed by
-
-  \s*=\s*    # an equals sign (possibly with whitespace either side), then
-
-  (?<default>(?>    # the default answer, which can be either:
-
-    (?<string>' + Regexp.quoted_string.to_s + ')      # a quoted string
-
-    |           # or
-
-
-                (?<float>\-?(?:(?>\d+\.\d*)|(?>\d*\.\d+))(?:[eEdD][+-]?\d+)?)(?:_RKIND)? # a floating point number
-
-    |           #or
-
-    (?<int>\-?\d++) # an integer
-
-    |         #or
-
-                (?<complex>\((?:\-?(?:(?>\d+\.\d*)|(?>\d*\.\d+))(?:[eEdD][+-]?\d+)?),\s*(?:\-?(?:(?>\d+\.\d*)|(?>\d*\.\d+))(?:[eEdD][+-]?\d+)?)\)) #a complex number
-
-    |         #or
-
-
-    (?:(?<word>\S+)(?=\s|\)|\]|[\n\r]+|\Z)) # a single word containing no spaces
-            # which must be followed by a space or ) or ] or \n or \Z
-
-  )))', Regexp::EXTENDED)
   end
 end
 
