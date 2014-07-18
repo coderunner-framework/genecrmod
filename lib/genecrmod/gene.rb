@@ -197,12 +197,35 @@ class CodeRunner
         #get_global_results
       #end
       #p ['fusionQ is ', fusionQ]
-      #@percent_complete = completed_timesteps.to_f / ntstep.to_f * 100.0
+      @percent_complete = completed_timesteps.to_f / ntimesteps.to_f * 100.0
     end
 
     def get_status
-      return :Unknown
+			if @running
+				get_completed_timesteps
+				if completed_timesteps == 0
+					@status = :NotStarted
+				else
+					@status = :Incomplete
+				end
+			else
+				get_completed_timesteps
+				if @completed_timesteps == @ntimesteps
+					@status = :Complete
+				else
+					if FileTest.exist?('GENE.finished')
+						@status = :Complete
+					else
+						@status = :Failed
+					end
+				end
+			end
     end
+		def get_completed_timesteps
+			Dir.chdir(@directory) do
+        @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat].split("\n").size
+			end
+		end
 
 
     @fortran_namelist_source_file_match = /((\.F9[05])|(\.fpp)|COMDAT.inc)$/
