@@ -223,7 +223,7 @@ class CodeRunner
     end
 		def get_completed_timesteps
 			Dir.chdir(@directory) do
-        @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat].split("\n").size
+        @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat &2>/dev/null].split("\n").size
 			end
 		end
 
