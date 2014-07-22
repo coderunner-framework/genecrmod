@@ -204,13 +204,15 @@ class CodeRunner
     end
 
     def get_status
-			if @running and @status != :Queueing
-				get_completed_timesteps
-				if completed_timesteps == 0
-					@status = :NotStarted
-				else
-					@status = :Incomplete
-				end
+			if @running 
+        if @status != :Queueing
+          get_completed_timesteps
+          if completed_timesteps == 0
+            @status = :NotStarted
+          else
+            @status = :Incomplete
+          end
+        end
 			else
 				get_completed_timesteps
 				if @completed_timesteps == @ntimesteps
