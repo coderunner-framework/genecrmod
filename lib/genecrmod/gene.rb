@@ -204,7 +204,7 @@ class CodeRunner
     end
 
     def get_status
-			if @running
+			if @running and @status != :Queueing
 				get_completed_timesteps
 				if completed_timesteps == 0
 					@status = :NotStarted
