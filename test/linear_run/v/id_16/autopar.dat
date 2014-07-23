@@ -1,0 +1,54 @@
+parallelization:    s   v   w   x   y   z
+parallelization:    4   1   1   1   1   1  nblocks:    32
+   1 1 1 1 1 1 1 1 1 :    1.1634 MB, t =  3.679E-03 sec
+   2 1 1 1 1 1 1 1 1 :    1.2112 MB, t =  3.564E-03 sec
+   2 2 1 1 1 1 1 1 1 :    1.2606 MB, t =  2.134E-03 sec
+   2 2 2 1 1 1 1 1 1 :    1.1719 MB, t =  2.104E-03 sec
+   2 2 2 2 1 1 1 1 1 :    1.3866 MB, t =  3.305E-03 sec
+   2 2 2 3 1 1 1 1 1 :    2.5430 MB, t =  2.861E-03 sec
+   2 2 2 1 1 2 1 1 1 :    1.1752 MB, t =  2.852E-03 sec
+   2 2 2 1 1 1 2 1 1 :    1.1763 MB, t =  3.311E-03 sec
+   2 2 2 1 1 1 1 1 2 :    1.2008 MB, t =  1.853E-03 sec
+   best perf_vec      min. WCT     mem_min  mem_max deficit(byte) data segment (MB)
+   2 2 2 1 1 1 1 1 2   1.8526E-03     1.16     2.54     2565344    14.735
+parallelization:    2   1   2   1   1   1  nblocks:     8
+   1 1 1 1 1 1 1 1 1 :    1.2843 MB, t =  3.656E-03 sec
+   2 1 1 1 1 1 1 1 1 :    1.3321 MB, t =  3.398E-03 sec
+   2 2 1 1 1 1 1 1 1 :    1.3859 MB, t =  3.199E-03 sec
+   2 2 2 1 1 1 1 1 1 :    1.2347 MB, t =  3.622E-03 sec
+   2 2 1 2 1 1 1 1 1 :    1.5163 MB, t =  3.815E-03 sec
+   2 2 1 3 1 1 1 1 1 :    3.2605 MB, t =  3.049E-03 sec
+   2 2 1 3 1 2 1 1 1 :    3.2616 MB, t =  2.837E-03 sec
+   2 2 1 3 1 2 2 1 1 :    3.2627 MB, t =  3.305E-03 sec
+   2 2 1 3 1 2 1 1 2 :    3.2873 MB, t =  2.598E-03 sec
+   best perf_vec      min. WCT     mem_min  mem_max deficit(byte) data segment (MB)
+   2 2 1 3 1 2 1 1 2   2.5978E-03     1.23     3.29           0    15.539
+parallelization:    1   1   4   1   1   1  nblocks:   768
+   1 1 1 1 1 1 1 1 1 :    1.4452 MB, t =  8.047E-03 sec
+skipped parallelization    1   1   4   1   1   1 based on speed of first perf_vec
+parallelization:    2   1   1   1   1   2  nblocks:     1
+   1 1 1 1 1 1 1 1 1 :    1.2204 MB, t =  8.096E-03 sec
+skipped parallelization    2   1   1   1   1   2 based on speed of first perf_vec
+parallelization:    1   1   2   1   1   2  nblocks:     4
+   1 1 1 1 1 1 1 1 1 :    1.3612 MB, t =  8.276E-03 sec
+skipped parallelization    1   1   2   1   1   2 based on speed of first perf_vec
+parallelization:    1   1   1   1   1   4  nblocks:    16
+   1 1 1 1 1 1 1 1 1 :    1.3259 MB, t =  1.228E-02 sec
+skipped parallelization    1   1   1   1   1   4 based on speed of first perf_vec
+parallelization:    2   2   1   1   1   1  nblocks:     4
+   1 1 1 1 1 1 1 1 1 :    1.4373 MB, t =  4.053E-03 sec
+skipped parallelization    2   2   1   1   1   1 based on speed of first perf_vec
+parallelization:    1   2   2   1   1   1  nblocks:     4
+   1 1 1 1 1 1 1 1 1 :    1.6721 MB, t =  4.755E-03 sec
+skipped parallelization    1   2   2   1   1   1 based on speed of first perf_vec
+parallelization:    1   2   1   1   1   2  nblocks:     4
+   1 1 1 1 1 1 1 1 1 :    1.5376 MB, t =  9.851E-03 sec
+skipped parallelization    1   2   1   1   1   2 based on speed of first perf_vec
+parallelization:    1   4   1   1   1   1  nblocks:    32
+   1 1 1 1 1 1 1 1 1 :    1.7395 MB, t =  6.339E-03 sec
+skipped parallelization    1   4   1   1   1   1 based on speed of first perf_vec
+-------------------------------------------------------
+Choice for parallelization:    4   1   1   1   1   1
+Choice for alternative routines:  2 2 2 1 1 1 1 1 2
+nblocks =       32
+using BLAS routines for (i,j) loops: yes
