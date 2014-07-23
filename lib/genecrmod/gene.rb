@@ -298,10 +298,14 @@ EOF1
         end
       end
     end
+    # This is a temporary hack... we should do this properly!!!
     def graphkit(name, options={})
       case name
       when /growth_rates_vs_ky/
         return GraphKit.quick_create([@kyvals, @growth_rates])
+      when /ion_n2_vs_time/
+        return GraphKit.quick_create([get_h5_narray_all('nrg.dat.h5', '/nrgIons/time').to_gslv, get_h5_narray_all('nrg.dat.h5', '/nrgIons/n2').to_gslv])
+
       end
     end
 
