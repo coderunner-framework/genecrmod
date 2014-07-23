@@ -294,7 +294,7 @@ EOF1
         elsif FileTest.exist?('omega.dat')
           @kyvals, @growth_rates, @frequencies = GSL::Vector.filescan('omega.dat')
         else
-          @kyvals, @growth_rates, @frequencies = [[]] * 3
+          @kyvals, @growth_rates, @frequencies = [nil] * 3
         end
       end
     end
