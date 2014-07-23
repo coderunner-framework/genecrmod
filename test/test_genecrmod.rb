@@ -1,7 +1,8 @@
 require 'helper'
 
 class TestGenecrmod < Test::Unit::TestCase
-  should "probably rename this file and start testing for real" do
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+  def test_read
+    @runner = CodeRunner.fetch_runner(Y: 'test/linear_run/', A: true, C: 'gene')
+    @runner.print_out(0)
   end
 end

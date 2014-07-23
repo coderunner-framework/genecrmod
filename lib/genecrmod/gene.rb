@@ -13,6 +13,9 @@ class CodeRunner
     # Where this file is
     @code_module_folder =  File.dirname(File.expand_path(__FILE__)) # i.e. the directory this file is in
 
+    require @code_module_folder + '/hdf5.rb'
+    require @code_module_folder + '/check_parameters.rb'
+
     # Use the Run::FortranNamelist tools to process the variable database
     setup_namelists(@code_module_folder)
 
@@ -156,8 +159,6 @@ class CodeRunner
       text
     end
 
-    def check_parameters
-    end
 
 
 
@@ -204,7 +205,7 @@ class CodeRunner
     end
 
     def get_status
-			if @running 
+			if @running
         if @status != :Queueing
           get_completed_timesteps
           if completed_timesteps == 0
@@ -228,7 +229,11 @@ class CodeRunner
     end
 		def get_completed_timesteps
 			Dir.chdir(@directory) do
-        @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat 2>/dev/null].split("\n").size
+        if FileTest.exist?('nrg.dat.h5')
+          @completed_timesteps = get_h5_narray_all('nrg.dat.h5', '/nrgIons/time').shape[0]
+        else
+          @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat 2>/dev/null].split("\n").size
+        end
 			end
 		end
 
@@ -282,7 +287,11 @@ EOF1
 
     def get_growth_rates
       Dir.chdir(@directory) do
-        if FileTest.exist?('omega.dat')
+        if FileTest.exist?(ofile = 'omega.dat.h5')
+          @kyvals = get_h5_narray_all(ofile, '/ky').to_gslv
+          @growth_rates = get_h5_narray_all(ofile, '/gamma').to_gslv
+          @frequencies = get_h5_narray_all(ofile, '/omega').to_gslv
+        elsif FileTest.exist?('omega.dat')
           @kyvals, @growth_rates, @frequencies = GSL::Vector.filescan('omega.dat')
         else
           @kyvals, @growth_rates, @frequencies = [[]] * 3

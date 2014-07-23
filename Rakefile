@@ -20,6 +20,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{A module which allows the GENE gyrokinetic code to be run using the CodeRunner framework. }
   gem.description = %Q{A module which allows the GENE gyrokinetic code to be run using the CodeRunner framework. }
   gem.email = "edmundhighcock@users.sourceforge.net"
+	gem.files.exclude 'test/**/*'
   gem.authors = ["Edmund Highcock"]
   # dependencies defined in Gemfile
 end

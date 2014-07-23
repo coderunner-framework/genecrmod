@@ -461,18 +461,20 @@
        :help=>nil,
        :code_name=>:kymin,
        :must_pass=>
-        [{:test=>"kind_of? String",
-          :explanation=>"This variable must be a string."}],
-       :type=>:String},
+        [{:test=>"kind_of? Numeric",
+          :explanation=>
+           "This variable must be a floating point number (an integer is also acceptable: it will be converted into a floating point number)."}],
+       :type=>:Float},
      :lv=>
       {:should_include=>"true",
        :description=>nil,
        :help=>nil,
        :code_name=>:lv,
        :must_pass=>
-        [{:test=>"kind_of? Integer",
-          :explanation=>"This variable must be an integer."}],
-       :type=>:Integer},
+        [{:test=>"kind_of? Numeric",
+          :explanation=>
+           "This variable must be a floating point number (an integer is also acceptable: it will be converted into a floating point number)."}],
+       :type=>:Float},
      :lw=>
       {:should_include=>"true",
        :description=>nil,
@@ -537,9 +539,10 @@
        :help=>nil,
        :code_name=>:x0,
        :must_pass=>
-        [{:test=>"kind_of? Integer",
-          :explanation=>"This variable must be an integer."}],
-       :type=>:Integer},
+        [{:test=>"kind_of? Numeric",
+          :explanation=>
+           "This variable must be a floating point number (an integer is also acceptable: it will be converted into a floating point number)."}],
+       :type=>:Float},
      :mu_grid_type=>
       {:should_include=>"true",
        :description=>nil,
@@ -618,10 +621,9 @@
        :help=>nil,
        :code_name=>:comp_type,
        :must_pass=>
-        [{:test=>"kind_of? String and FORTRAN_BOOLS.include? self",
-          :explanation=>
-           "This variable must be a fortran boolean. (In Ruby this is represented as a string: e.g. '.true.')"}],
-       :type=>:Fortran_Bool},
+        [{:test=>"kind_of? String",
+          :explanation=>"This variable must be a string."}],
+       :type=>:String},
      :perf_vec=>
       {:should_include=>"true",
        :description=>nil,
@@ -3157,9 +3159,10 @@
        :help=>nil,
        :code_name=>:bref,
        :must_pass=>
-        [{:test=>"kind_of? Integer",
-          :explanation=>"This variable must be an integer."}],
-       :type=>:Integer},
+        [{:test=>"kind_of? Numeric",
+          :explanation=>
+           "This variable must be a floating point number (an integer is also acceptable: it will be converted into a floating point number)."}],
+       :type=>:Float},
      :mref=>
       {:should_include=>"true",
        :description=>nil,
