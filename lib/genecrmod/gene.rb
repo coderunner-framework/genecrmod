@@ -201,7 +201,7 @@ class CodeRunner
         end
       end
       #p ['fusionQ is ', fusionQ]
-      @percent_complete = completed_timesteps.to_f / ntimesteps.to_f * 100.0
+      @percent_complete = completed_timesteps.to_f  * (istep_nrg||10) / ntimesteps.to_f * 100.0
     end
 
     def get_status
@@ -229,11 +229,11 @@ class CodeRunner
     end
 		def get_completed_timesteps
 			Dir.chdir(@directory) do
-        if FileTest.exist?('nrg.dat.h5')
-          @completed_timesteps = get_h5_narray_all('nrg.dat.h5', '/nrgIons/time').shape[0]
-        else
+        #if FileTest.exist?('nrg.dat.h5')
+          #@completed_timesteps = get_h5_narray_all('nrg.dat.h5', '/nrgIons/time').shape[0]
+        #else
           @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat 2>/dev/null].split("\n").size
-        end
+        #end
 			end
 		end
 
