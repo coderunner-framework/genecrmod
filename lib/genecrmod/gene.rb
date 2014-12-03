@@ -27,6 +27,7 @@ class CodeRunner
     ###################################################
 
     @results = [
+			:growth_rates
     ]
 
     @code_long="GENE Gyrokinetic Electromagnetic Numerical Experiment"
