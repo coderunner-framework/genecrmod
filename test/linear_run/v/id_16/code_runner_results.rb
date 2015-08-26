@@ -3,17 +3,18 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
 # This is a syntactically correct Ruby file, which is used by CodeRunner. Please do not edit unless you know what you are doing.
-# Directory:	/home2/e281/e281/highcock/Code/genecrmod/test/linear_run/v/id_16
-# Runname:	v_istep_omega_10_ntimesteps_10000_omega_prec_0.01_adapt_lx_.true._nky0_1_nx0_4_omt_1_1.5_write_h5_.true._id_16
-# ID:		16
+# Directory:  /local/home/vanwyk/code/genecrmod/test/linear_run/v/id_16
+# Runname:  v_istep_omega_10_ntimesteps_10000_omega_prec_0.01_adapt_lx_.true._nky0_1_nx0_4_omt_1_1.5_write_h5_.true._id_16
+# ID:   16
 
 # Results:
-{:time=>nil,
+{:growth_rates=>GSL::Vector.alloc([0.0]),
+ :time=>nil,
  :is_a_restart=>nil,
  :restart_id=>nil,
  :restart_run_name=>nil,
  :completed_timesteps=>1001,
- :percent_complete=>10.01,
+ :percent_complete=>100.1,
  :preamble=>nil,
  :job_no=>7321,
  :running=>false,

@@ -2,14 +2,8 @@
 class CodeRunner
   #  This is a customised subclass of the CodeRunner::Run  class which allows CodeRunner to run and analyse the GENE gyrokinetic code (see http://www2.ipp.mpg.de/~fsj/gene/)
   #
-  #p 'hellllllooooo!!!'
   class Gene < Run::FortranNamelist
     #include CodeRunner::SYSTEM_MODULE
-    #
-
-
-
-
     # Where this file is
     @code_module_folder =  File.dirname(File.expand_path(__FILE__)) # i.e. the directory this file is in
 
@@ -18,8 +12,6 @@ class CodeRunner
 
     # Use the Run::FortranNamelist tools to process the variable database
     setup_namelists(@code_module_folder)
-
-    # Setup gs2 in case people are using it
 
     ################################################
     # Quantities that are read or determined by CodeRunner
@@ -45,8 +37,6 @@ class CodeRunner
 
     #  A hook which gets called when printing the standard run information to the screen using the status command.
     def print_out_line
-      #p ['id', id, 'ctd', ctd]
-      #p rcp.results.zip(rcp.results.map{|r| send(r)})
       name = @run_name
       name += " (res: #@restart_id)" if @restart_id
       name += " real_id: #@real_id" if @real_id
@@ -68,47 +58,17 @@ class CodeRunner
       raise "Restart not tested yet"
       #new_run = self.dup
       (rcp.variables).each{|v| new_run.set(v, send(v)) if send(v)}
-      #if @flux_option == "gs2"
-        #gs2_runs.each_with_index do |run, i|
-          #CodeRunner::Gs2.rcp.variables.each{|v| new_run.gs2_runs[i].set(v, run.send(v)) if run.send(v)}
-        #end
-      #end
-      #@naming_pars.delete(:preamble)
-      #SUBMIT_OPTIONS.each{|v| new_run.set(v, self.send(v)) unless new_run.send(v)}
-      ##(rcp.results + rcp.gs2_run_info).each{|result| new_run.set(result, nil)}
       new_run.is_a_restart = true
       new_run.restart_id = @id
       new_run.restart_run_name = @run_name
       new_run.nopt = -1
-      #new_run.init_option = "restart"
-      #new_run.iternt_file = @run_name + ".iternt"
-      #new_run.iterflx_file = @run_name + ".iterflx"
-      #new_run.init_file = @run_name + ".tmp"
-      #@runner.nprocs = @nprocs if @runner.nprocs == "1" # 1 is the default so this means the user probably didn't specify nprocs
-      #raise "Restart must be on the same number of processors as the previous run: new is #{new_run.nprocs.inspect} and old is #{@nprocs.inspect}" if !new_run.nprocs or new_run.nprocs != @nprocs
-    ###   @runner.parameters.each{|var, value| new_run.set(var,value)} if @runner.parameters
-    ###   ep @runner.parameters
       new_run.run_name = nil
       new_run.naming_pars = @naming_pars
       new_run.update_submission_parameters(new_run.parameter_hash.inspect, false) if new_run.parameter_hash
       new_run.naming_pars.delete(:restart_id)
       new_run.generate_run_name
-      #new_run.run_name += '_t'
       eputs 'Copying GENE Restart file'
-      ##system "ls #@directory"
       FileUtils.cp("#@directory/NOUT", "#{new_run.directory}/NIN")
-      ##########if new_run.flux_option == "gs2" and @flux_option == "gs2"
-        ##########for i in 0...n_flux_tubes
-          ##########new_run.gs2_runs[i].directory = new_run.directory + "/flux_tube_#{i+1}"
-          ##########FileUtils.makedirs(new_run.gs2_runs[i].directory)
-          ###########ep ['gs2_runs[i] before', gs2_runs[i].nwrite, new_run.gs2_runs[i].nwrite, new_run.gs2_runs[i].parameter_hash]
-          ##########gs2_runs[i].restart(new_run.gs2_runs[i])
-          ###########ep ['gs2_runs[i] after', gs2_runs[i].nwrite, new_run.gs2_runs[i].nwrite, new_run.gs2_runs[i].parameter_hash]
-          ###########new_run.gs2_runs[i].run_name = new_run.run_name + (i+1).to_s
-        ##########end
-      ##########end
-      ##@runner.submit(new_run)
-      #new_run
     end
     #  This is a hook which gets called just before submitting a simulation. It sets up the folder and generates any necessary input files.
     def generate_input_file
@@ -118,6 +78,9 @@ class CodeRunner
         end
         @diagdir = "."
         @n_procs_sim = actual_number_of_processors
+        # Simulation time limit is set to ~ 90% of wall mins to allow GENE to 
+        # exit gracefully
+        @timelim = @wall_mins * 55 if @wall_mins
         write_input_file
     end
 
@@ -136,7 +99,6 @@ class CodeRunner
       text = ""
       ext = enum ? "_#{enum}" : ""
       text << "!#{'='*30}\n!#{hash[:description]} #{enum} \n!#{'='*30}\n" if hash[:description]
-      #text << "&#{namelist}#{ext}\n"
       text << "&#{namelist}\n"
       hash[:variables].each do |var, var_hash|
         code_var = (var_hash[:code_name] or var)
@@ -170,7 +132,6 @@ class CodeRunner
 
     #  This command uses the infrastructure provided by Run::FortranNamelist, provided by CodeRunner itself.
     def write_input_file
-      #File.open("#@run_name.in", 'w'){|file| file.puts input_file_text}
       File.open("parameters", 'w'){|file| file.puts input_file_text}
     end
 
@@ -194,14 +155,12 @@ class CodeRunner
     #
     def process_directory_code_specific
       get_status
-      #p ['id is', id, 'ctd is ', ctd]
       if ctd
         #get_global_results
         if !nonlinear or nonlinear.fortran_false?
           get_growth_rates
         end
       end
-      #p ['fusionQ is ', fusionQ]
       @percent_complete = completed_timesteps.to_f  * (istep_nrg||10) / ntimesteps.to_f * 100.0
     end
 
@@ -230,11 +189,7 @@ class CodeRunner
     end
 		def get_completed_timesteps
 			Dir.chdir(@directory) do
-        #if FileTest.exist?('nrg.dat.h5')
-          #@completed_timesteps = get_h5_narray_all('nrg.dat.h5', '/nrgIons/time').shape[0]
-        #else
           @completed_timesteps = %x[grep '^\\s\\+\\S\\+\\s*$' nrg.dat 2>/dev/null].split("\n").size
-        #end
 			end
 		end
 
