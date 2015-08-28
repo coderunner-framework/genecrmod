@@ -942,9 +942,10 @@
        :help=>nil,
        :code_name=>:underflow_limit,
        :must_pass=>
-        [{:test=>"kind_of? String",
-          :explanation=>"This variable must be a string."}],
-       :type=>:String},
+        [{:test=>"kind_of? Numeric",
+          :explanation=>
+           "This variable must be a floating point number (an integer is also acceptable: it will be converted into a floating point number)."}],
+       :type=>:Float},
      :omega_prec=>
       {:should_include=>"true",
        :description=>nil,

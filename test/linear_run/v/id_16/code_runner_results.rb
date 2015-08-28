@@ -3,7 +3,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
 # This is a syntactically correct Ruby file, which is used by CodeRunner. Please do not edit unless you know what you are doing.
-# Directory:  /local/home/vanwyk/code/genecrmod/test/linear_run/v/id_16
+# Directory:  /home/vanwyk/code/genecrmod/test/linear_run/v/id_16
 # Runname:  v_istep_omega_10_ntimesteps_10000_omega_prec_0.01_adapt_lx_.true._nky0_1_nx0_4_omt_1_1.5_write_h5_.true._id_16
 # ID:   16
 

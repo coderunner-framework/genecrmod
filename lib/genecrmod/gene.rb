@@ -50,26 +50,31 @@ class CodeRunner
 
 
 
-    # Modify new_run so that it becomes a restart of self. Adusts
+    # Modify new_run so that it becomes a restart of self. Adjusts
     # all the parameters of the new run to be equal to the parameters
     # of the run that calls this function, and sets up its run name
     # correctly
     def restart(new_run)
-      raise "Restart not tested yet"
-      #new_run = self.dup
       (rcp.variables).each{|v| new_run.set(v, send(v)) if send(v)}
       new_run.is_a_restart = true
       new_run.restart_id = @id
       new_run.restart_run_name = @run_name
-      new_run.nopt = -1
       new_run.run_name = nil
       new_run.naming_pars = @naming_pars
       new_run.update_submission_parameters(new_run.parameter_hash.inspect, false) if new_run.parameter_hash
       new_run.naming_pars.delete(:restart_id)
       new_run.generate_run_name
-      eputs 'Copying GENE Restart file'
-      FileUtils.cp("#@directory/NOUT", "#{new_run.directory}/NIN")
+
+      eputs 'Copying GENE restart file'
+      if (@chpt_h5 and @chpt_h5.fortran_true?)
+        new_run.chpt_read_h5 = ".true."
+        FileUtils.cp("#@directory/checkpoint.h5", "#{new_run.directory}/checkpoint.h5")
+      else
+        new_run.read_checkpoint = ".true."
+        FileUtils.cp("#@directory/checkpoint", "#{new_run.directory}/checkpoint")
+      end
     end
+
     #  This is a hook which gets called just before submitting a simulation. It sets up the folder and generates any necessary input files.
     def generate_input_file
         check_parameters

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = "0.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Edmund Highcock"]
+  s.authors = ["Edmund Highcock", "Ferdinand van Wyk"]
   s.date = "2015-08-26"
   s.description = "A module which allows the GENE gyrokinetic code to be run using the CodeRunner framework. "
   s.email = "edmundhighcock@users.sourceforge.net"
